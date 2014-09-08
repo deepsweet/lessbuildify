@@ -81,7 +81,7 @@ module.exports = function(browserify, options) {
             lessFiles += '@import "' + file + '";\n';
 
             // info placement
-            this.push('// stylify: ' + file);
+            this.push('// lessbuildify: ' + file);
             // do not put CSS content to the resulting JS file
             this.push(null);
 
