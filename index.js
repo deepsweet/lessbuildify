@@ -6,28 +6,29 @@ var fs = require('fs'),
     autoprefixer = require('autoprefixer-core'),
     CleanCSS = require('clean-css');
 
+// default config
+var defaults = {
+    less: {
+        compress: false,
+        cleancss: false,
+        ieCompat: false,
+        syncImport: true,
+        sourceMap: false
+    },
+    autoprefixer: {
+        cascade: true,
+        map: false
+    },
+    cleancss: {
+        processImport: false,
+        noRebase: true,
+        keepSpecialComments: 0
+    }
+};
+
 module.exports = function(browserify, options) {
 
     var lessFiles = '',
-        // default config
-        defaults = {
-            less: {
-                compress: false,
-                cleancss: false,
-                ieCompat: false,
-                syncImport: true,
-                sourceMap: false
-            },
-            autoprefixer: {
-                cascade: true,
-                map: false
-            },
-            cleancss: {
-                processImport: false,
-                noRebase: true,
-                keepSpecialComments: 0
-            }
-        };
 
     // get options
     options = extend(true, {}, defaults, options);
