@@ -1,5 +1,5 @@
 {
-  "name": "stylify",
+  "name": "lessbuildify",
   "version": "0.1.0",
   "description": "Browserify plugin for compiling Less to the external file",
   "keywords": [
@@ -7,7 +7,7 @@
     "browserify",
     "browserify-plugin"
   ],
-  "homepage": "https://github.com/deepsweet/stylify",
+  "homepage": "https://github.com/deepsweet/lessbuildify",
   "author": {
     "name": "Kir Belevich",
     "email": "kir@soulshine.in",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/deepsweet/stylify.git"
+    "url": "git://github.com/deepsweet/lessbuildify.git"
   },
   "main": "index.js",
   "dependencies": {
