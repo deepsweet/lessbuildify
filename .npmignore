@@ -1,5 +1,6 @@
 test/
 coverage/
+.gitignore
 .gitattributes
 .editorconfig
 .eslintrc
