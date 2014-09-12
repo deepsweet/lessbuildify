@@ -48,11 +48,11 @@ browserify: {
 
 ### options
 
-* `options.dest`
+#### `options.dest`
 
 Destination `.css`-file to write out compiled and processed `.less`-files. No default value.
 
-* `options.less`
+#### `options.less`
 
 Defaults:
 
@@ -68,7 +68,7 @@ less: {
 
 Less parser's and compiler's options are combined into one hash.
 
-* `options.autoprefixer`
+#### `options.autoprefixer`
 
 Defaults:
 
@@ -79,7 +79,7 @@ autoprefixer: {
 }
 ```
 
-* `options.cleancss`
+#### `options.cleancss`
 
 Defaults:
 
