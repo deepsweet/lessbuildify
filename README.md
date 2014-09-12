@@ -32,19 +32,13 @@ b.bundle().pipe(fs.createWriteStream('out.js'))
 
 ```javascript
 browserify: {
-    files: {
-        'out.js': 'in.js'
-    },
+    files: { 'out.js': 'in.js' },
     options: {
         plugin: [
             [ 'lessbuildify', {
                 dest: 'out.css',
-                less: {
-                    sourceMap: true
-                },
-                autoprefixer: {
-                    map: 'inline'
-                },
+                less: { sourceMap: true },
+                autoprefixer: { map: 'inline' },
                 cleancss: false
             } ]
         ]
@@ -54,13 +48,13 @@ browserify: {
 
 ### options
 
-#### `options.dest`
+* `options.dest`
 
-Destination `.css`-file to write out compiled and processed required `.less`-files. No default value.
+Destination `.css`-file to write out compiled and processed `.less`-files. No default value.
 
-#### `options.less`
+* `options.less`
 
-defaults:
+Defaults:
 
 ```javascript
 less: {
@@ -74,9 +68,9 @@ less: {
 
 Less parser's and compiler's options are combined into one hash.
 
-#### `options.autoprefixer`
+* `options.autoprefixer`
 
-defaults:
+Defaults:
 
 ```javascript
 autoprefixer: {
@@ -85,9 +79,9 @@ autoprefixer: {
 }
 ```
 
-#### `options.cleancss`
+* `options.cleancss`
 
-defaults:
+Defaults:
 
 ```javascript
 cleancss: {
