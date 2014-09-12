@@ -1,0 +1,9 @@
+body {
+  background: #ff0000;
+}
+.foo {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}

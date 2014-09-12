@@ -1,6 +1,6 @@
 {
   "name": "lessbuildify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Browserify plugin for compiling Less to the external file",
   "keywords": [
     "less",
@@ -13,6 +13,7 @@
     "email": "kir@soulshine.in",
     "url": "https://github.com/deepsweet"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/deepsweet/lessbuildify.git"
@@ -26,10 +27,23 @@
     "through2": "~0.6.1"
   },
   "devDependencies": {
-    "browserify": "~5.11.1"
+    "browserify": "~5.11.1",
+    "coveralls": "~2.11.1",
+    "eslint": "~0.8.1",
+    "istanbul": "~0.3.2",
+    "jscs": "~1.6.1",
+    "mocha": "~1.21.4",
+    "must": "~0.12.0",
+    "sinon": "~1.10.3"
   },
-  "license": "MIT",
   "engines": {
     "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "npm run lint && mocha",
+    "lint": "eslint index.js && jscs index.js",
+    "coverage": "istanbul cover _mocha --",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- && cat ./coverage/lcov.info | coveralls",
+    "travis": "npm run test && npm run coveralls"
   }
 }

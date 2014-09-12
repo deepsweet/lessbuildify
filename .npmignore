@@ -1,0 +1,7 @@
+test/
+coverage/
+.gitattributes
+.editorconfig
+.eslintrc
+.jscsrc
+.travis.yml

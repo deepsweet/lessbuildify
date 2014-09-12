@@ -8,37 +8,35 @@ var fs = require('fs'),
 
 // default config
 var defaults = {
-    less: {
-        compress: false,
-        cleancss: false,
-        ieCompat: false,
-        syncImport: true,
-        sourceMap: false
-    },
-    autoprefixer: {
-        cascade: true,
-        map: false
-    },
-    cleancss: {
-        processImport: false,
-        noRebase: true,
-        keepSpecialComments: 0
-    }
-};
+        less: {
+            compress: false,
+            cleancss: false,
+            ieCompat: false,
+            syncImport: true,
+            sourceMap: false
+        },
+        autoprefixer: {
+            cascade: true,
+            map: false
+        },
+        cleancss: {
+            processImport: false,
+            noRebase: true,
+            keepSpecialComments: 0
+        }
+    };
 
 module.exports = function(browserify, options) {
 
     var lessFiles = '',
-
-    // get options
-    options = extend(true, {}, defaults, options);
+        opts = extend(true, {}, defaults, options);
 
     browserify.on('bundle', function(bundle) {
 
         bundle.on('end', function() {
 
             // parse less
-            var parser = new less.Parser(options.less);
+            var parser = new less.Parser(opts.less);
 
             parser.parse(lessFiles, function(err, ast) {
 
@@ -47,19 +45,28 @@ module.exports = function(browserify, options) {
                 }
 
                 // compile less
-                var css = ast.toCSS(options.less);
+                var css = ast.toCSS(opts.less);
+
+                browserify.emit('lessbuildify:tocss', css);
 
                 // autoprefixer
-                if (options.autoprefixer !== false) {
-                    css = autoprefixer(options.autoprefixer).process(css, options.autoprefixer).css;
+                if (opts.autoprefixer !== false) {
+                    css = autoprefixer(opts.autoprefixer).process(css, opts.autoprefixer).css;
+                    browserify.emit('lessbuildify:autoprefixer', css);
                 }
 
                 // clean-css
-                if (options.cleancss !== false) {
-                    css = new CleanCSS(options.cleancss).minify(css);
+                if (opts.cleancss !== false) {
+                    css = new CleanCSS(opts.cleancss).minify(css);
+                    browserify.emit('lessbuildify:cleancss', css);
                 }
 
-                fs.writeFileSync(options.dest, css);
+                // output
+                if (opts.dest) {
+                    fs.writeFileSync(opts.dest, css);
+                }
+
+                browserify.emit('lessbuildify:end', css);
 
             });
 
@@ -77,12 +84,14 @@ module.exports = function(browserify, options) {
         // process read/write stream
         return through(null, function() {
 
+            browserify.emit('lessbuildify:file', file);
+
             // collect .less files as `@import`s with absolute paths
             // so Less can deal with the inner relative `@import`s by himself
             lessFiles += '@import "' + file + '";\n';
 
             // info placement
-            this.push('// lessbuildify: ' + file);
+            this.push('// lessbuildify: ' + path.relative(process.cwd(), file));
             // do not put CSS content to the resulting JS file
             this.push(null);
 
@@ -90,4 +99,4 @@ module.exports = function(browserify, options) {
 
     });
 
-}
+};
