@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     path = require('path'),
     through = require('through2'),
@@ -50,12 +52,14 @@ module.exports = function(browserify, options) {
                 // inside the transform, but that would require parsing the
                 // required less files individually, and then parsing the
                 // collection of them here.
-                while (stream = tmpStreams.pop()) {
-                    Object.keys(parser.imports.files).map(function(dep) {
+                var files = Object.keys(parser.imports.files);
+                while (tmpStreams.length > 1) {
+                    stream = tmpStreams.pop();
+                    for (var i = 0; i < files.length; i++) {
                         // This will tell watchify that the file associated
                         // with `stream` depends on `dep`.
-                        stream.emit('file', dep);
-                    })
+                        stream.emit('file', files[i]);
+                    }
                 }
 
                 // compile less
