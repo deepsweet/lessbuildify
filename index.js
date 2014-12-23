@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     path = require('path'),
     through = require('through2'),
@@ -29,6 +31,7 @@ var defaults = {
 module.exports = function(browserify, options) {
 
     var lessFiles = '',
+        tmpStreams = [],
         opts = extend(true, {}, defaults, options);
 
     browserify.on('bundle', function(bundle) {
@@ -42,6 +45,21 @@ module.exports = function(browserify, options) {
 
                 if (err) {
                     throw err;
+                }
+
+                var stream;
+                // Ideally the file event would be emitted while the file is
+                // inside the transform, but that would require parsing the
+                // required less files individually, and then parsing the
+                // collection of them here.
+                var files = Object.keys(parser.imports.files);
+                while (tmpStreams.length > 1) {
+                    stream = tmpStreams.pop();
+                    for (var i = 0; i < files.length; i++) {
+                        // This will tell watchify that the file associated
+                        // with `stream` depends on `dep`.
+                        stream.emit('file', files[i]);
+                    }
                 }
 
                 // compile less
@@ -82,7 +100,7 @@ module.exports = function(browserify, options) {
         }
 
         // process read/write stream
-        return through(null, function() {
+        var stream = through(null, function() {
 
             browserify.emit('lessbuildify:file', file);
 
@@ -96,6 +114,8 @@ module.exports = function(browserify, options) {
             this.push(null);
 
         });
+        tmpStreams.push(stream);
+        return stream;
 
     });
 
